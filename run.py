@@ -18,6 +18,7 @@ actions = SHEET.worksheet('actions')
 contact = SHEET.worksheet('contact')
 location = SHEET.worksheet('location')
 
+# Master menus
 def main_menu():
     """
     To select which menu you would like to do on a request
@@ -52,7 +53,7 @@ def search_menu():
             find_contact_menu()
             menu = False
         elif selection == '3':
-            print('3')
+            find_location_menu()
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
@@ -100,7 +101,7 @@ def get_request_details(id,row):
     if actions_view == '1':
         find_actions(id)
     else:
-        find_request_menu()
+        search_menu()
 
 # Actions
 def find_actions(req_id):
@@ -164,6 +165,51 @@ def get_contact_details(id,row):
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
 
+    search_menu()
+
+# location
+def find_location_menu():
+    """
+    To select which search you would like to do on a request
+    """
+    menu=True
+
+    while menu:
+        print('1. Search by location ID\n2. Search by house number\n3. Search by Street\n4. Search by area\n5. Search by postcode\n6. Display all locations')
+        selection = input('Please enter the number of what you would like to search by \n')
+        if selection == '1':
+            find_by_id(4)
+            menu = False
+        elif selection == '2':
+            find_for_report(4,'Please enter house number of contact',2)
+            menu = False
+        elif selection == '3':
+            find_for_report(4,'Please enter street name',3)
+            menu = False
+        elif selection == '4':
+            find_for_report(4,'Please enter area eg, Port Talbot',4)
+            menu = False
+        elif selection == '5':
+            find_for_report(4,'Please enter postcode eg, sa12 1aa',5)
+            menu = False
+        elif selection == '6':
+            display_all(4)
+        else:
+            print(f'Invalid selection: You selected {selection} please try again')
+
+def get_location_details(id,row):
+    """
+    Prints location details to console
+    """
+    address1 = location.cell(row,2).value
+    address2 = location.cell(row,3).value
+    address3 = location.cell(row,4).value
+    postcode = location.cell(row,5).value
+
+    print(f'Location ID: {id}\nHouse Number: {address1}\nStreet: {address2}\nArea: {address3}\nPostcode: {postcode}')
+
+    search_menu()
+
 # General search Functions
 def find_by_id(database):
     """
@@ -180,7 +226,7 @@ def find_by_id(database):
     else:
         selected_database=location
 
-    id = input('What is the request id you would like to view? \n')
+    id = input('What is the id you would like to view? \n')
     # Finds the id and stores what cell that id is in
     cell = selected_database.find(id,in_column=1)
 
@@ -193,7 +239,7 @@ def find_by_id(database):
     elif database == 3:
         get_contact_details(id,line)
     else:
-        selected_database=location
+        get_location_details(id,line)
 
 def find_for_report(database,search,col):
     """
@@ -221,7 +267,7 @@ def find_for_report(database,search,col):
     elif database == 3:
         print_report(database,results)
     else:
-        print('location')
+        print_report(database,results)
 
 def print_report(database,results):
     """
@@ -240,6 +286,7 @@ def print_report(database,results):
         header = ['ID','First Name','Last Name','Phone','Email']
     else:
         selected_database=location
+        header = ['ID','House Number','Street','Area','Postcode']
 
     report = []
     
@@ -271,6 +318,5 @@ def display_all(database):
     report = selected_database.get_all_values()
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
-
 
 main_menu()
