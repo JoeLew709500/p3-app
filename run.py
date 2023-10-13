@@ -18,6 +18,7 @@ actions = SHEET.worksheet('actions')
 contact = SHEET.worksheet('contact')
 location = SHEET.worksheet('location')
 
+# Requests
 def find_request_menu():
     """
     To select which search you would like to do on a request
@@ -80,6 +81,7 @@ def find_request_by_id():
 
     get_request_details(id,line)
 
+
 def get_request_details(id,row):
     """
     Prints request details to console
@@ -91,5 +93,37 @@ def get_request_details(id,row):
     time_to_complete = requests.cell(row,8).value
 
     print(f'Request ID: {id}\nDate Received: {date_received}\nDate Completed: {date_completed}\nRequest Details: {text}\nType: {type}\nTime to complete: {time_to_complete} days')
+
+    # Asking if user wants to view actions
+    actions_view = input('Would you like to view the actions? (1 for yes 2 for no) ')
+
+    if actions_view == '1':
+        find_actions(id)
+    else:
+        find_request_menu()
+
+# Actions
+def find_actions(req_id):
+    """
+    Finds actions for requests
+    """
+
+    results = actions.findall(req_id,in_column=2)
+
+    print_actions(req_id,results)
+
+def print_actions(req_id,results):
+    """
+    Prints actions report to console
+    """
+    report = []
+    header = ['ID','Details','Date']
+    for result in results:
+        line = result.row
+        details = actions.row_values(line)
+        del details [1]
+        report.append(details)
+
+    print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
 find_request_menu()
