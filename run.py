@@ -43,7 +43,7 @@ def search_menu():
     menu=True
 
     while menu:
-        print('1. Search for requests ID\n2. Search for contacts\n3. Search for location')
+        print('1. Search for requests\n2. Search for contacts\n3. Search for location')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
             find_request_menu()
@@ -71,27 +71,16 @@ def find_request_menu():
             find_by_id(1)
             menu = False
         elif selection == '2':
-            find_request_for_report('Please enter the received date you want to search in dd/mm/yyyy format',4)
+            find_for_report(1,'Please enter the received date you want to search in dd/mm/yyyy format',4)
             menu = False
         elif selection == '3':
-            find_request_for_report('Please enter the completed date you want to search in dd/mm/yyyy format',5)
+            find_for_report(1,'Please enter the completed date you want to search in dd/mm/yyyy format',5)
             menu = False
         elif selection == '4':
-            find_request_for_report('Please enter either flytip or noise',7)
+            find_for_report(1,'Please enter either flytip or noise',7)
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
-
-def find_request_for_report(search,col):
-    """
-    Finds requests for report
-    """
-
-    date_comp = input(f'{search}\n')
-
-    results = requests.findall(date_comp,in_column=col)
-
-    print_requests_report(results)
 
 def print_requests_report(results):
     """
@@ -165,13 +154,13 @@ def find_contact_menu():
             find_by_id(3)
             menu = False
         elif selection == '2':
-            find_contact_for_report('Please enter first name of contact',2)
+            find_for_report(3,'Please enter first name of contact',2)
             menu = False
         elif selection == '3':
-            find_contact_for_report('Please enter last name of contact',3)
+            find_for_report(3,'Please enter last name of contact',3)
             menu = False
         elif selection == '4':
-            find_contact_for_report('Please enter phone number of contact',4)
+            find_for_report(3,'Please enter phone number of contact',4)
             menu = False
         elif selection == '5':
             display_all()
@@ -188,17 +177,6 @@ def get_contact_details(id,row):
     email = contact.cell(row,5).value
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
-
-def find_contact_for_report(search,col):
-    """
-    Finds contact for report
-    """
-
-    search_criteria = input(f'{search}\n')
-
-    results = contact.findall(search_criteria,in_column=col)
-
-    print_contact_report(results)
 
 def print_contact_report(results):
     """
@@ -253,6 +231,34 @@ def find_by_id(database):
         get_contact_details(id,line)
     else:
         selected_database=location
+
+def find_for_report(database,search,col):
+    """
+    Finds for report
+    """
+
+    # Selects what sheet we are searching
+    if database == 1:
+        selected_database=requests
+    elif database == 2:
+        selected_database=actions
+    elif database == 3:
+        selected_database=contact
+    else:
+        selected_database=location
+
+    search_criteria = input(f'{search}\n')
+
+    results = selected_database.findall(search_criteria,in_column=col)
+
+    if database == 1:
+        print_requests_report(results)
+    elif database == 2:
+        print_actions(results)
+    elif database == 3:
+        print_contact_report(results)
+    else:
+        print('location')
 
 
 main_menu()
