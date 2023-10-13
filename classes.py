@@ -7,7 +7,7 @@ class Person:
         self.phone = phone
         self.email = email
 
-    def comma_sep_person(self):
+    def list(self):
         return [self.first_name,self.last_name,int(self.phone),self.email]
 
 class Premise:
@@ -17,7 +17,7 @@ class Premise:
         self.address3 = address3
         self.postcode = postcode
 
-    def comma_sep_premise(self):
+    def list(self):
         return [self.address1,self.address2,self.address3,self.postcode]
 
 # Create objects

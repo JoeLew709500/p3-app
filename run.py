@@ -1,7 +1,8 @@
 import gspread
+import re
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-from classes import Person,Premise,create_person
+from classes import Person,Premise,create_person,create_premise
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -72,10 +73,10 @@ def create_menu():
             print('1')
             menu = False
         elif selection == '2':
-            create_contact()
+            create_record(contact)
             menu = False
         elif selection == '3':
-            print('3')
+            create_record(location)
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
@@ -149,6 +150,33 @@ def print_actions(req_id,results):
 
     print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
+    add_to_actions = input('Do you want to add an action? (1 for yes 2 for main menu) \n')
+    if add_to_actions == '1':
+        add_action(req_id)
+    else:
+        main_menu()
+
+def add_action(req_id):
+    """
+    Adds actions to action
+    """
+    while True:
+        record = []
+        try:
+            text = input('What are the details of the action?\n')
+            date_input = input("what's the date of the action? (Enter in dd/mm/yyyy format)\n")
+            date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
+            if not date_test.match(date_input):
+                raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
+            record.append(int(req_id))
+            record.append(text)
+            record.append(date_input)       
+        except ValueError as e:
+            print(e)
+        else:
+            add_new_record_to_worksheet(record,actions)
+            break
+
 # Contact
 def find_contact_menu():
     """
@@ -192,20 +220,6 @@ def get_contact_details(id,row):
         report_results(1,id,2)
     else:
         search_menu()
-
-def create_contact():
-    record = create_person()
-
-    print(f'First Name:{record.first_name}\nLast Name:{record.last_name}\nPhone Number {record.phone}\nEmail: {record.email}')
-
-    correct = input('Would you like to create this contact? (1 for yes 2 to try again or 3 for main menu) ')
-    if correct == '1':
-        add_new_date_to_worksheet(record.comma_sep_person(),3)
-
-    elif correct == '2':
-        create_contact()
-    else:
-        main_menu()
 
 # location
 def find_location_menu():
@@ -368,31 +382,38 @@ def display_all(database):
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
 
-def add_new_date_to_worksheet(record,sheet):
+def create_record(database):
+    if database == contact:
+        record = create_person()
+    elif database == location:
+        record = create_premise()
+
+    correct = input('Would you like to create this record? (1 for yes 2 for no) ')
+    if correct == '1':
+        add_new_record_to_worksheet(record.list(),database)
+
+    else:
+        create_menu()
+
+def add_new_record_to_worksheet(record,database):
     """
     Adds new data to worksheet
     """
     print(f'Updating......\n')
-        # Selects what sheet we are searching
-    if sheet == 1:
-        selected_database=requests
-    elif sheet == 2:
-        selected_database=actions
-    elif sheet == 3:
-        selected_database=contact
-    else:
-        selected_database=location
 
     # Get max number in id column for next ID
-    all_ids = contact.col_values(1)
+    all_ids = database.col_values(1)
     del all_ids[0]
     all_ids = [int(i) for i in all_ids]
     new_id = max(all_ids)+1
 
     record.insert(0,new_id)
 
-    selected_database.append_row(record)
+    database.append_row(record)
 
-    print(f' {selected_database.title} has updated\n')
+    print(f'{database.title} has updated\n')
 
+    main_menu()
+
+print('Welcome to python console Public Protection resource system\n')
 main_menu()
