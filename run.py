@@ -68,7 +68,7 @@ def find_request_menu():
         print('1. Search by request ID\n2. Search by received date\n3. Search by completed date\n4. Search by type')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
-            find_request_by_id()
+            find_by_id(1)
             menu = False
         elif selection == '2':
             find_request_for_report('Please enter the received date you want to search in dd/mm/yyyy format',4)
@@ -106,19 +106,6 @@ def print_requests_report(results):
         report.append(request_details)
     
     print(tabulate(report,headers=header,tablefmt='github'))
-    
-def find_request_by_id():
-    """
-    Get request details from id number
-    """
-
-    id = input('What is the request id you would like to view? \n')
-    # Finds the id and stores what cell that id is in
-    cell = requests.find(id,in_column=1)
-
-    line = cell.row
-
-    get_request_details(id,line)
 
 def get_request_details(id,row):
     """
@@ -165,29 +152,6 @@ def print_actions(req_id,results):
     print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
 # Contact
-def find_contact_by_id(database):
-    """
-    Get details from id number
-    """
-
-    # Selects what sheet we are searching
-    if database == 1:
-        selected_database=requests
-    elif database == 2:
-        selected_database=actions
-    elif database == 3:
-        selected_database=contact
-    else:
-        selected_database=location
-
-    id = input('What is the request id you would like to view? \n')
-    # Finds the id and stores what cell that id is in
-    cell = selected_database.find(id,in_column=1)
-
-    line = cell.row
-
-    get_contact_details(id,line)
-
 def find_contact_menu():
     """
     To select which search you would like to do on a request
@@ -198,7 +162,7 @@ def find_contact_menu():
         print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number\n5. Display all contacts')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
-            find_contact_by_id(3)
+            find_by_id(3)
             menu = False
         elif selection == '2':
             find_contact_for_report('Please enter first name of contact',2)
@@ -258,5 +222,37 @@ def display_all():
     report = contact.get_all_values()
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
+
+# General search Functions
+def find_by_id(database):
+    """
+    Get details from id number
+    """
+
+    # Selects what sheet we are searching
+    if database == 1:
+        selected_database=requests
+    elif database == 2:
+        selected_database=actions
+    elif database == 3:
+        selected_database=contact
+    else:
+        selected_database=location
+
+    id = input('What is the request id you would like to view? \n')
+    # Finds the id and stores what cell that id is in
+    cell = selected_database.find(id,in_column=1)
+
+    line = cell.row
+
+    if database == 1:
+        get_request_details(id,line)
+    elif database == 2:
+        selected_database=actions
+    elif database == 3:
+        get_contact_details(id,line)
+    else:
+        selected_database=location
+
 
 main_menu()
