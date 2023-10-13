@@ -17,6 +17,9 @@ class Premise:
         self.address3 = address3
         self.postcode = postcode
 
+    def comma_sep_premise(self):
+        return [self.address1,self.address2,self.address3,self.postcode]
+
 # Create objects
 def create_person():
     """
@@ -40,5 +43,22 @@ def create_person():
                 raise ValueError("Invalid email address format")
 
             return Person(first_name, last_name, phone, email)    
+        except ValueError as e:
+            print(f'{e}\nPlease try again')
+
+def create_premise():
+    """
+    Create premise with class
+    """
+    while True:
+        try:
+            address1 = input("Enter house number or name: ")
+            address2 = input("Enter street: ")
+            address3 = input("Enter area: ")
+            postcode = input("Enter postcode: ")
+            postcode_test = re.compile(r"^[a-z]{2}[0-9]{1,2}\s[0-9]{1}[a-z]{2}$")
+            if not postcode_test.match(postcode):
+                raise ValueError("The postcode format needs to be #### ### or ### ### eg, sa12 2aa")
+            return Premise(address1, address2, address3, postcode)    
         except ValueError as e:
             print(f'{e}\nPlease try again')
