@@ -195,7 +195,7 @@ def find_contact_menu():
     menu=True
 
     while menu:
-        print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number')
+        print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number\n5. Display all contacts')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
             find_contact_by_id(3)
@@ -209,12 +209,14 @@ def find_contact_menu():
         elif selection == '4':
             find_contact_for_report('Please enter phone number of contact',4)
             menu = False
+        elif selection == '5':
+            display_all()
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
 def get_contact_details(id,row):
     """
-    Prints request details to console
+    Prints contact details to console
     """
     first_name = contact.cell(row,2).value
     last_name = contact.cell(row,3).value
@@ -249,5 +251,12 @@ def print_contact_report(results):
 
     find_contact_menu()
 
+def display_all():
+    """
+    Shows all contacts in console
+    """
+    report = contact.get_all_values()
+
+    print(tabulate(report,headers='firstrow',tablefmt='github'))
 
 main_menu()
