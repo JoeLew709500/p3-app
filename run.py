@@ -201,13 +201,13 @@ def find_contact_menu():
             find_contact_by_id(3)
             menu = False
         elif selection == '2':
-            print(2)
+            find_contact_for_report('Please enter first name of contact',2)
             menu = False
         elif selection == '3':
-            print(3)
+            find_contact_for_report('Please enter last name of contact',3)
             menu = False
         elif selection == '4':
-            print(4)
+            find_contact_for_report('Please enter phone number of contact',4)
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
@@ -222,5 +222,32 @@ def get_contact_details(id,row):
     email = contact.cell(row,5).value
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
+
+def find_contact_for_report(search,col):
+    """
+    Finds contact for report
+    """
+
+    search_criteria = input(f'{search}\n')
+
+    results = contact.findall(search_criteria,in_column=col)
+
+    print_contact_report(results)
+
+def print_contact_report(results):
+    """
+    Prints contact report to console
+    """
+    report = []
+    header = ['ID','First Name','Last Name','Phone','Email']
+    for result in results:
+        line = result.row
+        details = contact.row_values(line)
+        report.append(details)
+    
+    print(tabulate(report,headers=header,tablefmt='github'))
+
+    find_contact_menu()
+
 
 main_menu()
