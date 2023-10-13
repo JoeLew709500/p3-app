@@ -1,7 +1,7 @@
 import gspread
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
-from classes import Person,Premise
+from classes import Person,Premise,create_person
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -72,7 +72,7 @@ def create_menu():
             print('1')
             menu = False
         elif selection == '2':
-            print('2')
+            create_contact()
             menu = False
         elif selection == '3':
             print('3')
@@ -193,6 +193,20 @@ def get_contact_details(id,row):
     else:
         search_menu()
 
+def create_contact():
+    record = create_person()
+
+    print(f'First Name:{record.first_name}\nLast Name:{record.last_name}\nPhone Number {record.phone}\nEmail: {record.email}')
+
+    correct = input('Would you like to create this contact? (1 for yes 2 to try again or 3 for main menu) ')
+    if correct == '1':
+        add_new_date_to_worksheet(record.comma_sep_person(),3)
+
+    elif correct == '2':
+        create_contact()
+    else:
+        main_menu()
+
 # location
 def find_location_menu():
     """
@@ -240,7 +254,7 @@ def get_location_details(id,row):
     else:
         search_menu()
 
-# General search Functions
+# General Functions
 def find_by_id(database):
     """
     Get details from id number
@@ -353,5 +367,32 @@ def display_all(database):
     report = selected_database.get_all_values()
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
+
+def add_new_date_to_worksheet(record,sheet):
+    """
+    Adds new data to worksheet
+    """
+    print(f'Updating......\n')
+        # Selects what sheet we are searching
+    if sheet == 1:
+        selected_database=requests
+    elif sheet == 2:
+        selected_database=actions
+    elif sheet == 3:
+        selected_database=contact
+    else:
+        selected_database=location
+
+    # Get max number in id column for next ID
+    all_ids = contact.col_values(1)
+    del all_ids[0]
+    all_ids = [int(i) for i in all_ids]
+    new_id = max(all_ids)+1
+
+    record.insert(0,new_id)
+
+    selected_database.append_row(record)
+
+    print(f' {selected_database.title} has updated\n')
 
 main_menu()

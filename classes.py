@@ -7,6 +7,9 @@ class Person:
         self.phone = phone
         self.email = email
 
+    def comma_sep_person(self):
+        return [self.first_name,self.last_name,int(self.phone),self.email]
+
 class Premise:
     def __init__(self,address1,address2,address3,postcode):
         self.address1 = address1
@@ -16,6 +19,9 @@ class Premise:
 
 # Create objects
 def create_person():
+    """
+    Create person with class
+    """
     while True:
         try:
             first_name = input("Enter first name: ")
