@@ -32,14 +32,14 @@ def main_menu():
             search_menu()
             menu = False
         elif selection == '2':
-            print('2')
+            create_menu()
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
 def search_menu():
     """
-    To select which menu you would like select
+    To select which search menu you would like select
     """
     menu=True
 
@@ -54,6 +54,27 @@ def search_menu():
             menu = False
         elif selection == '3':
             find_location_menu()
+            menu = False
+        else:
+            print(f'Invalid selection: You selected {selection} please try again')
+
+def create_menu():
+    """
+    To select which create menu you would like select
+    """
+    menu=True
+
+    while menu:
+        print('1. Create requests\n2. Create contacts\n3. Create for location')
+        selection = input('Please enter the number of what you would like to search by \n')
+        if selection == '1':
+            print('1')
+            menu = False
+        elif selection == '2':
+            print('2')
+            menu = False
+        elif selection == '3':
+            print('3')
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
