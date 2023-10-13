@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+from tabulate import tabulate
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -30,7 +31,7 @@ def find_request_menu():
             find_request_by_id()
             menu = False
         elif selection == '2':
-            print('Selected 2')
+            find_request_by_rec_date()
             menu = False
         elif selection == '3':
             print('Selected 3')
@@ -41,6 +42,31 @@ def find_request_menu():
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
+def find_request_by_rec_date():
+    """
+    Finds requests by received date
+    """
+
+    date_comp = input('Please enter the received date you want to search in dd/mm/yyyy format \n')
+
+    results = requests.findall(date_comp,in_column=4)
+
+    print_requests_report(results)
+
+def print_requests_report(results):
+    """
+    Prints requests report to console
+    """
+    report = []
+    header = ['ID','Received Date','Completed Date','Request Details','Type','Time to complete in days']
+    for result in results:
+        line = result.row
+        request_details = requests.row_values(line)
+        del request_details[1:3]
+        report.append(request_details)
+    
+    print(tabulate(report,headers=header,tablefmt='github'))
+    
 def find_request_by_id():
     """
     Get request details from id number
@@ -50,12 +76,14 @@ def find_request_by_id():
     # Finds the id and stores what cell that id is in
     cell = requests.find(id,in_column=1)
 
-    row = cell.row
+    line = cell.row
 
-    get_request_details(id,row)
+    get_request_details(id,line)
 
 def get_request_details(id,row):
-
+    """
+    Prints request details to console
+    """
     date_received = requests.cell(row,4).value
     date_completed = requests.cell(row,5).value
     text = requests.cell(row,6).value
