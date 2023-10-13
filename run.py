@@ -82,20 +82,6 @@ def find_request_menu():
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
-def print_requests_report(results):
-    """
-    Prints requests report to console
-    """
-    report = []
-    header = ['ID','Received Date','Completed Date','Request Details','Type','Time to complete in days']
-    for result in results:
-        line = result.row
-        request_details = requests.row_values(line)
-        del request_details[1:3]
-        report.append(request_details)
-    
-    print(tabulate(report,headers=header,tablefmt='github'))
-
 def get_request_details(id,row):
     """
     Prints request details to console
@@ -163,7 +149,7 @@ def find_contact_menu():
             find_for_report(3,'Please enter phone number of contact',4)
             menu = False
         elif selection == '5':
-            display_all()
+            display_all(3)
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
@@ -177,29 +163,6 @@ def get_contact_details(id,row):
     email = contact.cell(row,5).value
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
-
-def print_contact_report(results):
-    """
-    Prints contact report to console
-    """
-    report = []
-    header = ['ID','First Name','Last Name','Phone','Email']
-    for result in results:
-        line = result.row
-        details = contact.row_values(line)
-        report.append(details)
-    
-    print(tabulate(report,headers=header,tablefmt='github'))
-
-    find_contact_menu()
-
-def display_all():
-    """
-    Shows all contacts in console
-    """
-    report = contact.get_all_values()
-
-    print(tabulate(report,headers='firstrow',tablefmt='github'))
 
 # General search Functions
 def find_by_id(database):
@@ -252,13 +215,62 @@ def find_for_report(database,search,col):
     results = selected_database.findall(search_criteria,in_column=col)
 
     if database == 1:
-        print_requests_report(results)
+        print_report(database,results)
     elif database == 2:
-        print_actions(results)
+        print_report(database,results)
     elif database == 3:
-        print_contact_report(results)
+        print_report(database,results)
     else:
         print('location')
+
+def print_report(database,results):
+    """
+    Prints report to console
+    """
+
+    # Selects what sheet we are searching
+    if database == 1:
+        selected_database=requests
+        header = ['ID','Received Date','Completed Date','Request Details','Type','Time to complete in days']
+    elif database == 2:
+        selected_database=actions
+        header = ['ID','Details','Date']
+    elif database == 3:
+        selected_database=contact
+        header = ['ID','First Name','Last Name','Phone','Email']
+    else:
+        selected_database=location
+
+    report = []
+    
+    for result in results:
+        line = result.row
+        details = selected_database.row_values(line)
+        if database == 1:
+            del details[1:3]
+        report.append(details)
+    
+    print(tabulate(report,headers=header,tablefmt='github'))
+
+    search_menu()
+
+def display_all(database):
+    """
+    Shows all of database in console
+    """
+    # Selects what sheet we are searching
+    if database == 1:
+        selected_database=requests
+    elif database == 2:
+        selected_database=actions
+    elif database == 3:
+        selected_database=contact
+    else:
+        selected_database=location
+
+    report = selected_database.get_all_values()
+
+    print(tabulate(report,headers='firstrow',tablefmt='github'))
 
 
 main_menu()
