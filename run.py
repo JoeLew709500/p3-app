@@ -49,7 +49,7 @@ def search_menu():
             find_request_menu()
             menu = False
         elif selection == '2':
-            print('2')
+            find_contact_menu()
             menu = False
         elif selection == '3':
             print('3')
@@ -164,7 +164,8 @@ def print_actions(req_id,results):
 
     print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
-def find_by_id(database):
+# Contact
+def find_contact_by_id(database):
     """
     Get details from id number
     """
@@ -185,9 +186,8 @@ def find_by_id(database):
 
     line = cell.row
 
-    get_request_details(id,line)
+    get_contact_details(id,line)
 
-# Contact
 def find_contact_menu():
     """
     To select which search you would like to do on a request
@@ -198,7 +198,7 @@ def find_contact_menu():
         print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
-            print(1)
+            find_contact_by_id(3)
             menu = False
         elif selection == '2':
             print(2)
@@ -211,5 +211,16 @@ def find_contact_menu():
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
+
+def get_contact_details(id,row):
+    """
+    Prints request details to console
+    """
+    first_name = contact.cell(row,2).value
+    last_name = contact.cell(row,3).value
+    phone = contact.cell(row,4).value
+    email = contact.cell(row,5).value
+
+    print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
 
 main_menu()
