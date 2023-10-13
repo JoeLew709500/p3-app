@@ -31,25 +31,25 @@ def find_request_menu():
             find_request_by_id()
             menu = False
         elif selection == '2':
-            find_request_by_rec_date()
+            find_request_for_report('Please enter the received date you want to search in dd/mm/yyyy format',4)
             menu = False
         elif selection == '3':
-            print('Selected 3')
+            find_request_for_report('Please enter the completed date you want to search in dd/mm/yyyy format',5)
             menu = False
         elif selection == '4':
-            print('Selected 4')
+            find_request_for_report('Please enter either flytip or noise',7)
             menu = False
         else:
             print(f'Invalid selection: You selected {selection} please try again')
 
-def find_request_by_rec_date():
+def find_request_for_report(search,col):
     """
-    Finds requests by received date
+    Finds requests for report
     """
 
-    date_comp = input('Please enter the received date you want to search in dd/mm/yyyy format \n')
+    date_comp = input(f'{search}\n')
 
-    results = requests.findall(date_comp,in_column=4)
+    results = requests.findall(date_comp,in_column=col)
 
     print_requests_report(results)
 
