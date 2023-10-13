@@ -18,6 +18,45 @@ actions = SHEET.worksheet('actions')
 contact = SHEET.worksheet('contact')
 location = SHEET.worksheet('location')
 
+def main_menu():
+    """
+    To select which menu you would like to do on a request
+    """
+    menu=True
+
+    while menu:
+        print('1. For search menu\n2. For create menu')
+        selection = input('Please enter the number of what you would like to search by \n')
+        if selection == '1':
+            search_menu()
+            menu = False
+        elif selection == '2':
+            print('2')
+            menu = False
+        else:
+            print(f'Invalid selection: You selected {selection} please try again')
+
+def search_menu():
+    """
+    To select which menu you would like select
+    """
+    menu=True
+
+    while menu:
+        print('1. Search for requests ID\n2. Search for contacts\n3. Search for location')
+        selection = input('Please enter the number of what you would like to search by \n')
+        if selection == '1':
+            find_request_menu()
+            menu = False
+        elif selection == '2':
+            print('2')
+            menu = False
+        elif selection == '3':
+            print('3')
+            menu = False
+        else:
+            print(f'Invalid selection: You selected {selection} please try again')
+
 # Requests
 def find_request_menu():
     """
@@ -81,7 +120,6 @@ def find_request_by_id():
 
     get_request_details(id,line)
 
-
 def get_request_details(id,row):
     """
     Prints request details to console
@@ -126,4 +164,52 @@ def print_actions(req_id,results):
 
     print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
-find_request_menu()
+def find_by_id(database):
+    """
+    Get details from id number
+    """
+
+    # Selects what sheet we are searching
+    if database == 1:
+        selected_database=requests
+    elif database == 2:
+        selected_database=actions
+    elif database == 3:
+        selected_database=contact
+    else:
+        selected_database=location
+
+    id = input('What is the request id you would like to view? \n')
+    # Finds the id and stores what cell that id is in
+    cell = selected_database.find(id,in_column=1)
+
+    line = cell.row
+
+    get_request_details(id,line)
+
+# Contact
+def find_contact_menu():
+    """
+    To select which search you would like to do on a request
+    """
+    menu=True
+
+    while menu:
+        print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number')
+        selection = input('Please enter the number of what you would like to search by \n')
+        if selection == '1':
+            print(1)
+            menu = False
+        elif selection == '2':
+            print(2)
+            menu = False
+        elif selection == '3':
+            print(3)
+            menu = False
+        elif selection == '4':
+            print(4)
+            menu = False
+        else:
+            print(f'Invalid selection: You selected {selection} please try again')
+
+main_menu()
