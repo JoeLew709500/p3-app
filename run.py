@@ -186,7 +186,11 @@ def get_contact_details(id,row):
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
 
-    search_menu()
+    view_requests = input('Do you want to view all requests from this contact? (1 for yes 2 for no)\n')
+    if view_requests == '1':
+        report_results(1,id,2)
+    else:
+        search_menu()
 
 # location
 def find_location_menu():
@@ -229,7 +233,11 @@ def get_location_details(id,row):
 
     print(f'Location ID: {id}\nHouse Number: {address1}\nStreet: {address2}\nArea: {address3}\nPostcode: {postcode}')
 
-    search_menu()
+    view_requests = input('Do you want to view all requests linked to this location? (1 for yes 2 for no)\n')
+    if view_requests == '1':
+        report_results(1,id,2)
+    else:
+        search_menu()
 
 # General search Functions
 def find_by_id(database):
@@ -264,7 +272,14 @@ def find_by_id(database):
 
 def find_for_report(database,search,col):
     """
-    Finds for report
+    Obtains search criteria
+    """
+    search_criteria = input(f'{search}\n')
+    report_results(database,search_criteria,col)
+
+def report_results(database,search_criteria,col):
+    """
+    Gets results for report
     """
 
     # Selects what sheet we are searching
@@ -276,8 +291,6 @@ def find_for_report(database,search,col):
         selected_database=contact
     else:
         selected_database=location
-
-    search_criteria = input(f'{search}\n')
 
     results = selected_database.findall(search_criteria,in_column=col)
 
