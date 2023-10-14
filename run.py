@@ -23,7 +23,7 @@ location = SHEET.worksheet('location')
 
 # User selected records
 selected_request_id = None
-selected_contact_id = None
+
 selected_location_id = None
 
 # Master menus
@@ -67,7 +67,7 @@ def create_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        create_request()
+        create_request(None)
     elif selection == 1:
         create_record(contact)
     elif selection == 2:
@@ -87,13 +87,13 @@ def find_request_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(1)
+        find_by_id(requests)
     elif selection == 1:
-        find_for_report(1,'Please enter the received date you want to search in dd/mm/yyyy format',4)
+        find_for_report(requests,'Please enter the received date you want to search in dd/mm/yyyy format',4,0)
     elif selection == 2:
-        find_for_report(1,'Please enter the completed date you want to search in dd/mm/yyyy format',5)
+        find_for_report(requests,'Please enter the completed date you want to search in dd/mm/yyyy format',5,0)
     elif selection == 3:
-        find_for_report(1,'Please enter either flytip or noise',7)
+        find_for_report(requests,'Please enter either flytip or noise',7,0)
     else:
         search_menu()
 
@@ -117,7 +117,7 @@ def get_request_details(id,row):
     else:
         search_menu()
 
-def create_request():
+def create_request(selected_contact_id):
     """
     Add new request 
     """
@@ -126,16 +126,19 @@ def create_request():
     while True:
         try:
             #contact id
-            contact_search = pick(['By ID','By first name','By last name'],'Please select which way you want to search for the contact','>>>')[1]
-            if contact_search == 0:
-                selected_contact = input('Please enter the contact id')
-            elif contact_search == 1:
-                selected_contact='first name'
+            if selected_contact_id == None:
+                contact_search = pick(['By ID','By first name','By last name'],'Please select which way you want to search for the contact','>>>')[1]
+                if contact_search == 0:
+                    selected_contact = input('Please enter the contact id')
+                elif contact_search == 1:
+                    find_for_report(3,'Please enter first name of contact',2,1)
+                else:
+                    find_for_report(3,'Please enter last name of contact',3,1)
             else:
-                selected_contact='last name'
+                selected_contact = selected_contact_id
 
             #location id
-            location_search = pick(['By ID','By street','By postcode'],'Please select which way you want to search for the contact','>>>')[1]
+            location_search = pick(['By ID','By street','By postcode'],'Please select which way you want to search for the locations','>>>')[1]
             if location_search == 0:
                 selected_location = input('Please enter the location id')
             elif location_search == 1:
@@ -227,15 +230,15 @@ def find_contact_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(3)
+        find_by_id(contact)
     elif selection == 1:
-        find_for_report(3,'Please enter first name of contact',2)
+        find_for_report(contact,'Please enter first name of contact',2,0)
     elif selection == 2:
-        find_for_report(3,'Please enter last name of contact',3)
+        find_for_report(contact,'Please enter last name of contact',3,0)
     elif selection == 3:
-        find_for_report(3,'Please enter phone number of contact',4)
+        find_for_report(contact,'Please enter phone number of contact',4,0)
     elif selection == 4:
-        display_all(3)
+        display_all(contact)
     else:
         search_menu()
 
@@ -255,7 +258,6 @@ def get_contact_details(id,row):
         report_results(1,id,2)
     else:
         search_menu()
-
 # location
 def find_location_menu():
     """
@@ -268,17 +270,17 @@ def find_location_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(4)
+        find_by_id(location)
     elif selection == 1:
-        find_for_report(4,'Please enter house number of contact',2)
+        find_for_report(location,'Please enter house number of contact',2,0)
     elif selection == 2:
-        find_for_report(4,'Please enter street name',3)
+        find_for_report(location,'Please enter street name',3,0)
     elif selection == 3:
-        find_for_report(4,'Please enter area eg, Port Talbot',4)
+        find_for_report(location,'Please enter area eg, Port Talbot',4,0)
     elif selection == 4:
-        find_for_report(4,'Please enter postcode eg, sa12 1aa',5)
+        find_for_report(location,'Please enter postcode eg, sa12 1aa',5,0)
     elif selection == 5:
-        display_all(3)
+        display_all(location)
     else:
         search_menu()
 
@@ -305,112 +307,75 @@ def find_by_id(database):
     Get details from id number
     """
 
-    # Selects what sheet we are searching
-    if database == 1:
-        selected_database=requests
-    elif database == 2:
-        selected_database=actions
-    elif database == 3:
-        selected_database=contact
-    else:
-        selected_database=location
-
+  
     id = input('What is the id you would like to view? \n')
     # Finds the id and stores what cell that id is in
-    cell = selected_database.find(id,in_column=1)
+    cell = database.find(id,in_column=1)
 
     line = cell.row
 
-    if database == 1:
+    if database == requests:
         get_request_details(id,line)
-    elif database == 2:
-        selected_database=actions
-    elif database == 3:
+    elif database == contact:
         get_contact_details(id,line)
     else:
         get_location_details(id,line)
 
-def find_for_report(database,search,col):
+def find_for_report(database,search,col,from_create):
     """
     Obtains search criteria
     """
     search_criteria = input(f'{search}\n')
-    report_results(database,search_criteria,col)
+    report_results(database,search_criteria,col,from_create)
 
-def report_results(database,search_criteria,col):
+def report_results(database,search_criteria,col,from_create):
     """
     Gets results for report
     """
 
-    # Selects what sheet we are searching
-    if database == 1:
-        selected_database=requests
-    elif database == 2:
-        selected_database=actions
-    elif database == 3:
-        selected_database=contact
-    else:
-        selected_database=location
+    results = database.findall(search_criteria,in_column=col)
 
-    results = selected_database.findall(search_criteria,in_column=col)
+    print_report(database,results,from_create)
 
-    if database == 1:
-        print_report(database,results)
-    elif database == 2:
-        print_report(database,results)
-    elif database == 3:
-        print_report(database,results)
-    else:
-        print_report(database,results)
-
-def print_report(database,results):
+def print_report(database,results,from_create):
     """
     Prints report to console
     """
 
     # Selects what sheet we are searching
-    if database == 1:
-        selected_database=requests
+    if database == requests:
         header = ['ID','Received Date','Completed Date','Request Details','Type','Time to complete in days']
-    elif database == 2:
-        selected_database=actions
+    elif database == actions:
         header = ['ID','Details','Date']
-    elif database == 3:
-        selected_database=contact
+    elif database == contact:
         header = ['ID','First Name','Last Name','Phone','Email']
     else:
-        selected_database=location
         header = ['ID','House Number','Street','Area','Postcode']
 
     report = []
     
     for result in results:
         line = result.row
-        details = selected_database.row_values(line)
-        if database == 1:
+        details = database.row_values(line)
+        if database == requests:
             del details[1:3]
         report.append(details)
     
     print(tabulate(report,headers=header,tablefmt='github'))
 
-    input('Click enter to continue back to the search menu\n')
-    search_menu()
+    if from_create == 0:
+        input('Click enter to continue back to the search menu\n')
+        search_menu()
+    else:
+        selected_contact_id = input('Please enter the ID of the contact you want')
+        create_request(selected_contact_id)
 
 def display_all(database):
     """
     Shows all of database in console
     """
-    # Selects what sheet we are searching
-    if database == 1:
-        selected_database=requests
-    elif database == 2:
-        selected_database=actions
-    elif database == 3:
-        selected_database=contact
-    else:
-        selected_database=location
 
-    report = selected_database.get_all_values()
+    report = database.get_all_values()
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
 
