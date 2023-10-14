@@ -161,8 +161,7 @@ def create_request():
         except ValueError as e:
             print(e)
         else:
-            print(record)
-            return record
+            add_new_record_to_worksheet(record,requests)
 
 # Actions
 def find_actions(req_id):
@@ -394,6 +393,7 @@ def print_report(database,results):
     
     print(tabulate(report,headers=header,tablefmt='github'))
 
+    input('Click enter to continue back to the search menu\n')
     search_menu()
 
 def display_all(database):
@@ -413,6 +413,9 @@ def display_all(database):
     report = selected_database.get_all_values()
 
     print(tabulate(report,headers='firstrow',tablefmt='github'))
+
+    input('Click enter to continue back to the search menu\n')
+    search_menu()
 
 def create_record(database):
     if database == contact:
