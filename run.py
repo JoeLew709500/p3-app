@@ -85,7 +85,7 @@ def find_request_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(requests)
+        find_by_id(requests,None)
     elif selection == 1:
         find_for_report(requests,'Please enter the received date you want to search in dd/mm/yyyy format',4,0)
     elif selection == 2:
@@ -237,7 +237,7 @@ def find_contact_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(contact)
+        find_by_id(contact,None)
     elif selection == 1:
         find_for_report(contact,'Please enter first name of contact',2,0)
     elif selection == 2:
@@ -277,7 +277,7 @@ def find_location_menu():
     selection = pick(selections,menu_title,'>>>')[1]
 
     if selection == 0:
-        find_by_id(location)
+        find_by_id(location,None)
     elif selection == 1:
         find_for_report(location,'Please enter house number of contact',2,0)
     elif selection == 2:
@@ -309,29 +309,30 @@ def get_location_details(id,row):
         search_menu()
 
 # General Functions
-def find_by_id(database):
+def find_by_id(database,id):
     """
     Get details from id number
     """
 
-    while True:
-        try:
-            id = int(input('What is the id you would like to view? \n'))
-        except ValueError:
-            print('Entries must be an integer')
-        else:
-            break
+    if id == None:
+        while True:
+            try:
+                id = int(input('What is the id you would like to view? \n'))
+            except ValueError:
+                print('Entries must be an integer')
+            else:
+                break
     # Finds the id and stores what cell that id is in
     cell = database.find(str(id),in_column=1)
 
     line = cell.row
 
     if database == requests:
-        get_request_details(id,line)
+        get_request_details(str(id),line)
     elif database == contact:
-        get_contact_details(id,line)
+        get_contact_details(str(id),line)
     else:
-        get_location_details(id,line)
+        get_location_details(str(id),line)
 
 def find_for_report(database,search,col,from_create):
     """
@@ -385,7 +386,7 @@ def print_report(database,results,from_create):
 
         selection = pick(selections,menu_title,'>>>')[1]
         if selection == 0:
-            find_by_id(database)
+            find_by_id(database,None)
         elif selection == 1:
             search_menu()
         else:
@@ -440,7 +441,20 @@ def add_new_record_to_worksheet(record,database):
 
     print(f'{database.title} has updated\n')
 
-    input('Click enter to continue back to the search menu\n')
-    main_menu()
+    input('Click enter to continue\n')
+
+    menu_title = 'Please select one of the following options'
+    selections = ['View created record','Search Menu','Main menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
+        if database == actions:
+            find_by_id(requests,record[1])
+        else:
+            find_by_id(database,new_id)
+    elif selection == 1:
+        search_menu()
+    else:
+        main_menu()
 
 main_menu()
