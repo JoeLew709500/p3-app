@@ -99,13 +99,19 @@ def get_request_details(id,row):
     """
     Prints request details to console
     """
+    
+    contact_info =  int(requests.cell(row,2).value)+1
+    
     date_received = requests.cell(row,4).value
     date_completed = requests.cell(row,5).value
     text = requests.cell(row,6).value
     type = requests.cell(row,7).value
     time_to_complete = requests.cell(row,8).value
+    contact_name = contact.cell(contact_info,2).value + ' ' + contact.cell(contact_info,3).value
+    contact_number = contact.cell(contact_info,4).value
+    contact_email = contact.cell(contact_info,5).value
 
-    print(f'Request ID: {id}\nDate Received: {date_received}\nDate Completed: {date_completed}\nRequest Details: {text}\nType: {type}\nTime to complete: {time_to_complete} days')
+    print(f'Request ID: {id}\nDate Received: {date_received}\nContact Name: {contact_name}\nContact Number: {contact_number}\nContact Email: {contact_email}\nDate Completed: {date_completed}\nRequest Details: {text}\nType: {type}\nTime to complete: {time_to_complete} days')
 
     # Asking if user wants to view actions
     actions_view = input('Would you like to view the actions? (1 for yes 2 for no) ')
