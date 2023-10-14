@@ -3,6 +3,7 @@ import re
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 from classes import Person,Premise,create_person,create_premise
+from pick import pick #https://github.com/wong2/pick
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -70,7 +71,7 @@ def create_menu():
         print('1. Create requests\n2. Create contacts\n3. Create for location')
         selection = input('Please enter the number of what you would like to search by \n')
         if selection == '1':
-            print('1')
+            create_request()
             menu = False
         elif selection == '2':
             create_record(contact)
@@ -125,6 +126,46 @@ def get_request_details(id,row):
         find_actions(id)
     else:
         search_menu()
+
+def create_request():
+    """
+    Add new request 
+    """
+    record = []
+    date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
+    while True:
+        #contact id
+        contact_search = pick(['By ID','By first name','By last name'],'Please select which way you want to search for the contact','>>>')[1]
+        if contact_search == 0:
+            print('id')
+        elif contact_search == 1:
+            print('first name')
+        else:
+            print('last name')
+
+        #location id
+        location_search = pick(['By ID','By street','By postcode'],'Please select which way you want to search for the contact','>>>')[1]
+        if location_search == 0:
+            print('id')
+        elif location_search == 1:
+            print('street')
+        else:
+            print('postcode')
+
+        date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)")
+        if not date_test.match(date_rec):
+            raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
+        date_comp = None
+        text = input("What is the request about?")
+        type_text = 'Please select the request type:'
+        types = ['flytip','noise','abandoned vehicle']
+        type = pick(types,type_text,indicator='>>>')[0]
+        record.append(date_rec)
+        record.append(date_comp)
+        record.append(text)
+        record.append(type)
+        print(record)
+
 
 # Actions
 def find_actions(req_id):
