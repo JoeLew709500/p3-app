@@ -131,9 +131,9 @@ def create_request(selected_contact_id):
                 if contact_search == 0:
                     selected_contact = input('Please enter the contact id')
                 elif contact_search == 1:
-                    find_for_report(3,'Please enter first name of contact',2,1)
+                    find_for_report(contact,'Please enter first name of contact',2,1)
                 else:
-                    find_for_report(3,'Please enter last name of contact',3,1)
+                    find_for_report(contact,'Please enter last name of contact',3,1)
             else:
                 selected_contact = selected_contact_id
 
@@ -147,11 +147,11 @@ def create_request(selected_contact_id):
                 selected_location = 'postcode'
 
 
-            date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)")
+            date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)\n")
             if not date_test.match(date_rec):
                 raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
             date_comp = None
-            text = input("What is the request about?")
+            text = input("What is the request about?\n")
             type_text = 'Please select the request type:'
             types = ['flytip','noise','abandoned vehicle']
             type = pick(types,type_text,indicator='>>>')[0]
@@ -367,7 +367,7 @@ def print_report(database,results,from_create):
         input('Click enter to continue back to the search menu\n')
         search_menu()
     else:
-        selected_contact_id = input('Please enter the ID of the contact you want')
+        selected_contact_id = input('Please enter the ID of the contact you want\n')
         create_request(selected_contact_id)
 
 def display_all(database):
@@ -413,6 +413,7 @@ def add_new_record_to_worksheet(record,database):
 
     print(f'{database.title} has updated\n')
 
+    input('Click enter to continue back to the search menu\n')
     main_menu()
 
 main_menu()
