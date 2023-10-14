@@ -304,7 +304,7 @@ def get_location_details(id,row):
 
     view_requests = input('Do you want to view all requests linked to this location? (1 for yes 2 for no)\n')
     if view_requests == '1':
-        report_results(requests,id,2,0)
+        report_results(requests,id,3,0)
     else:
         search_menu()
 
@@ -374,8 +374,17 @@ def print_report(database,results,from_create):
     print(tabulate(report,headers=header,tablefmt='github'))
 
     if from_create == 0:
-        input('Click enter to continue back to the search menu\n')
-        search_menu()
+        input('Click enter to continue\n')
+        menu_title = 'Please select one of the following options'
+        selections = ['View by Id','Search Menu','Main menu']
+
+        selection = pick(selections,menu_title,'>>>')[1]
+        if selection == 0:
+            find_by_id(database)
+        elif selection == 1:
+            search_menu()
+        else:
+            main_menu()
     else:
         if database == contact:
             selected_contact_id = input('Please enter the ID of the contact you want\n')
