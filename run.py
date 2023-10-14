@@ -26,86 +26,71 @@ def main_menu():
     """
     To select which menu you would like to do on a request
     """
-    menu=True
+    menu = pick(['Search menu','Create menu'],'Welcome to python console Public Protection resource system\n\nPlease select one of the below','>>>')[1]
 
-    while menu:
-        print('1. For search menu\n2. For create menu')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            search_menu()
-            menu = False
-        elif selection == '2':
-            create_menu()
-            menu = False
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    if menu == 0:
+        search_menu()
+    else:
+        create_menu()
 
 def search_menu():
     """
     To select which search menu you would like select
     """
-    menu=True
+    menu_title = 'Please select one of the following options'
+    selections = ['Search for requests','Search for contacts','Search for location','Main menu']
 
-    while menu:
-        print('1. Search for requests\n2. Search for contacts\n3. Search for location')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            find_request_menu()
-            menu = False
-        elif selection == '2':
-            find_contact_menu()
-            menu = False
-        elif selection == '3':
-            find_location_menu()
-            menu = False
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    selection = pick(selections,menu_title,'>>>')[1]
+
+    if selection == 0:
+        find_request_menu()
+    elif selection == 1:
+        find_contact_menu()
+    elif selection == 2:
+        find_location_menu()
+    else:
+        main_menu()
 
 def create_menu():
     """
     To select which create menu you would like select
     """
-    menu=True
 
-    while menu:
-        print('1. Create requests\n2. Create contacts\n3. Create for location')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            create_request()
-            menu = False
-        elif selection == '2':
-            create_record(contact)
-            menu = False
-        elif selection == '3':
-            create_record(location)
-            menu = False
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    menu_title = 'Please select one of the following options'
+    selections = ['Create a requests','Create a contacts','Create a location','Main menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+
+    if selection == 0:
+        create_request()
+    elif selection == 1:
+        create_record(contact)
+    elif selection == 2:
+        create_record(location)
+    else:
+        main_menu()
 
 # Requests
 def find_request_menu():
     """
     To select which search you would like to do on a request
     """
-    menu=True
 
-    while menu:
-        print('1. Search by request ID\n2. Search by received date\n3. Search by completed date\n4. Search by type')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            find_by_id(1)
-            menu = False
-        elif selection == '2':
-            find_for_report(1,'Please enter the received date you want to search in dd/mm/yyyy format',4)
-            menu = False
-        elif selection == '3':
-            find_for_report(1,'Please enter the completed date you want to search in dd/mm/yyyy format',5)
-            menu = False
-        elif selection == '4':
-            find_for_report(1,'Please enter either flytip or noise',7)
-            menu = False
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    menu_title = 'Please select one of the following options'
+    selections = ['Request by ID','Requests by received data','Requests by completed date','Requests by type','Search menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+
+    if selection == 0:
+        find_by_id(1)
+    elif selection == 1:
+        find_for_report(1,'Please enter the received date you want to search in dd/mm/yyyy format',4)
+    elif selection == 2:
+        find_for_report(1,'Please enter the completed date you want to search in dd/mm/yyyy format',5)
+    elif selection == 3:
+        find_for_report(1,'Please enter either flytip or noise',7)
+    else:
+        search_menu()
 
 def get_request_details(id,row):
     """
@@ -223,27 +208,25 @@ def find_contact_menu():
     """
     To select which search you would like to do on a request
     """
-    menu=True
 
-    while menu:
-        print('1. Search by contact ID\n2. Search by first name\n3. Search by last name\n4. Search by phone number\n5. Display all contacts')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            find_by_id(3)
-            menu = False
-        elif selection == '2':
-            find_for_report(3,'Please enter first name of contact',2)
-            menu = False
-        elif selection == '3':
-            find_for_report(3,'Please enter last name of contact',3)
-            menu = False
-        elif selection == '4':
-            find_for_report(3,'Please enter phone number of contact',4)
-            menu = False
-        elif selection == '5':
-            display_all(3)
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    
+    menu_title = 'Please select one of the following options'
+    selections = ['Contact by ID','Contact by first name','Contact by last name','Contact by phone number','All contacts','Search menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+
+    if selection == 0:
+        find_by_id(3)
+    elif selection == 1:
+        find_for_report(3,'Please enter first name of contact',2)
+    elif selection == 2:
+        find_for_report(3,'Please enter last name of contact',3)
+    elif selection == 3:
+        find_for_report(3,'Please enter phone number of contact',4)
+    elif selection == 4:
+        display_all(3)
+    else:
+        search_menu()
 
 def get_contact_details(id,row):
     """
@@ -267,30 +250,26 @@ def find_location_menu():
     """
     To select which search you would like to do on a request
     """
-    menu=True
 
-    while menu:
-        print('1. Search by location ID\n2. Search by house number\n3. Search by Street\n4. Search by area\n5. Search by postcode\n6. Display all locations')
-        selection = input('Please enter the number of what you would like to search by \n')
-        if selection == '1':
-            find_by_id(4)
-            menu = False
-        elif selection == '2':
-            find_for_report(4,'Please enter house number of contact',2)
-            menu = False
-        elif selection == '3':
-            find_for_report(4,'Please enter street name',3)
-            menu = False
-        elif selection == '4':
-            find_for_report(4,'Please enter area eg, Port Talbot',4)
-            menu = False
-        elif selection == '5':
-            find_for_report(4,'Please enter postcode eg, sa12 1aa',5)
-            menu = False
-        elif selection == '6':
-            display_all(4)
-        else:
-            print(f'Invalid selection: You selected {selection} please try again')
+    menu_title = 'Please select one of the following options'
+    selections = ['Location by ID','Location by house name/number','Location by street name','Location by area','Location by postcode','All locations','Search menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+
+    if selection == 0:
+        find_by_id(4)
+    elif selection == 1:
+        find_for_report(4,'Please enter house number of contact',2)
+    elif selection == 2:
+        find_for_report(4,'Please enter street name',3)
+    elif selection == 3:
+        find_for_report(4,'Please enter area eg, Port Talbot',4)
+    elif selection == 4:
+        find_for_report(4,'Please enter postcode eg, sa12 1aa',5)
+    elif selection == 5:
+        display_all(3)
+    else:
+        search_menu()
 
 def get_location_details(id,row):
     """
@@ -456,5 +435,4 @@ def add_new_record_to_worksheet(record,database):
 
     main_menu()
 
-print('Welcome to python console Public Protection resource system\n')
 main_menu()
