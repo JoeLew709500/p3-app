@@ -314,10 +314,15 @@ def find_by_id(database):
     Get details from id number
     """
 
-  
-    id = input('What is the id you would like to view? \n')
+    while True:
+        try:
+            id = int(input('What is the id you would like to view? \n'))
+        except ValueError:
+            print('Entries must be an integer')
+        else:
+            break
     # Finds the id and stores what cell that id is in
-    cell = database.find(id,in_column=1)
+    cell = database.find(str(id),in_column=1)
 
     line = cell.row
 
