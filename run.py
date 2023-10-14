@@ -262,7 +262,7 @@ def get_contact_details(id,row):
 
     view_requests = input('Do you want to view all requests from this contact? (1 for yes 2 for no)\n')
     if view_requests == '1':
-        report_results(1,id,2)
+        report_results(requests,id,2,0)
     else:
         search_menu()
 # location
@@ -304,7 +304,7 @@ def get_location_details(id,row):
 
     view_requests = input('Do you want to view all requests linked to this location? (1 for yes 2 for no)\n')
     if view_requests == '1':
-        report_results(1,id,2)
+        report_results(requests,id,2,0)
     else:
         search_menu()
 
