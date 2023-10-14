@@ -21,6 +21,11 @@ actions = SHEET.worksheet('actions')
 contact = SHEET.worksheet('contact')
 location = SHEET.worksheet('location')
 
+# User selected records
+selected_request_id = None
+selected_contact_id = None
+selected_location_id = None
+
 # Master menus
 def main_menu():
     """
@@ -119,38 +124,45 @@ def create_request():
     record = []
     date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
     while True:
-        #contact id
-        contact_search = pick(['By ID','By first name','By last name'],'Please select which way you want to search for the contact','>>>')[1]
-        if contact_search == 0:
-            print('id')
-        elif contact_search == 1:
-            print('first name')
+        try:
+            #contact id
+            contact_search = pick(['By ID','By first name','By last name'],'Please select which way you want to search for the contact','>>>')[1]
+            if contact_search == 0:
+                selected_contact = input('Please enter the contact id')
+            elif contact_search == 1:
+                selected_contact='first name'
+            else:
+                selected_contact='last name'
+
+            #location id
+            location_search = pick(['By ID','By street','By postcode'],'Please select which way you want to search for the contact','>>>')[1]
+            if location_search == 0:
+                selected_location = input('Please enter the location id')
+            elif location_search == 1:
+                selected_location = 'street'
+            else:
+                selected_location = 'postcode'
+
+
+            date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)")
+            if not date_test.match(date_rec):
+                raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
+            date_comp = None
+            text = input("What is the request about?")
+            type_text = 'Please select the request type:'
+            types = ['flytip','noise','abandoned vehicle']
+            type = pick(types,type_text,indicator='>>>')[0]
+            record.append(selected_contact)
+            record.append(selected_location)
+            record.append(date_rec)
+            record.append(date_comp)
+            record.append(text)
+            record.append(type)
+        except ValueError as e:
+            print(e)
         else:
-            print('last name')
-
-        #location id
-        location_search = pick(['By ID','By street','By postcode'],'Please select which way you want to search for the contact','>>>')[1]
-        if location_search == 0:
-            print('id')
-        elif location_search == 1:
-            print('street')
-        else:
-            print('postcode')
-
-        date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)")
-        if not date_test.match(date_rec):
-            raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
-        date_comp = None
-        text = input("What is the request about?")
-        type_text = 'Please select the request type:'
-        types = ['flytip','noise','abandoned vehicle']
-        type = pick(types,type_text,indicator='>>>')[0]
-        record.append(date_rec)
-        record.append(date_comp)
-        record.append(text)
-        record.append(type)
-        print(record)
-
+            print(record)
+            return record
 
 # Actions
 def find_actions(req_id):
