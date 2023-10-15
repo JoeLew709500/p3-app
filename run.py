@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 from classes import Person,Premise,create_person,create_premise
 from pick import pick #https://github.com/wong2/pick
+import datetime
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -134,15 +135,18 @@ def get_request_details(id,row):
 
     input('Click enter to continue\n')
     menu_title = 'Please select one of the following options'
-    selections = ['View actions','Search Menu','Main menu']
+    selections = ['View actions','Add completed date','Search Menu','Main menu']
 
     selection = pick(selections,menu_title,'>>>')[1]
     if selection == 0:
         find_actions(id)
     elif selection == 1:
+        add_completed_date(id,row,date_received)
+    elif selection == 2:
         search_menu()
     else:
         main_menu()
+
 def create_request():
     """
     Add new request 
@@ -200,6 +204,19 @@ def create_request():
             selected_contact_id = None
             selected_location_id = None
             add_new_record_to_worksheet(record,requests)
+
+def add_completed_date(id,row,date_rec):
+    """
+    Adds completed date to request and calculates time to complete
+    """
+
+    date_comp = input('Please enter date\n')
+    days_to_comp = calculate_days_between_dates(date_rec,date_comp)
+    requests.update_cell(row,5,date_comp)
+    requests.update_cell(row,8,days_to_comp)
+    print('Completed date added')
+    get_request_details(id,row)
+
 
 # Actions
 def find_actions(req_id):
@@ -510,5 +527,11 @@ def add_new_record_to_worksheet(record,database):
         search_menu()
     else:
         main_menu()
+
+def calculate_days_between_dates(date1,date2):
+    date1 = datetime.datetime.strptime(date1, "%d/%m/%Y")
+    date2 = datetime.datetime.strptime(date2, "%d/%m/%Y")
+    calc_days = date2-date1
+    return calc_days.days
 
 main_menu()
