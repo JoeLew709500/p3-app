@@ -402,6 +402,8 @@ def find_for_report(database,search,col,from_create):
     """
     if database == requests and col == 7:
         search_criteria = request_type_selector()
+    elif database == requests and col == 4 or database == requests and col == 5:
+        search_criteria = date_validator()
     else:
         search_criteria = input(f'{search}\n')
     report_results(database,search_criteria,col,from_create)
@@ -560,4 +562,5 @@ def print_stats():
     print(mean_df)
     input('Click enter to continue back to main menu\n')
     main_menu()
+
 main_menu()
