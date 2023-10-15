@@ -101,6 +101,7 @@ def get_request_details(id,row):
     """
     
     contact_info =  int(requests.cell(row,2).value)+1
+    location_info =  int(requests.cell(row,3).value)+1
     
     date_received = requests.cell(row,4).value
     date_completed = requests.cell(row,5).value
@@ -110,8 +111,26 @@ def get_request_details(id,row):
     contact_name = contact.cell(contact_info,2).value + ' ' + contact.cell(contact_info,3).value
     contact_number = contact.cell(contact_info,4).value
     contact_email = contact.cell(contact_info,5).value
+    address1 = location.cell(location_info,2).value
+    address2 = location.cell(location_info,3).value
+    address3 = location.cell(location_info,4).value
+    postcode = location.cell(location_info,5).value
 
-    print(f'Request ID: {id}\nDate Received: {date_received}\nContact Name: {contact_name}\nContact Number: {contact_number}\nContact Email: {contact_email}\nDate Completed: {date_completed}\nRequest Details: {text}\nType: {type}\nTime to complete: {time_to_complete} days')
+    print((f'\nRequest ID: {id}\n'
+           'Contact Information\n'
+           f'Contact Name: {contact_name}\n'
+           f'Contact Number: {contact_number}\n'
+           f'Contact Email: {contact_email}\n'
+           'Location Information\n'
+           f'House number/building number: {address1}\n'
+           f'Street: {address2}\n'
+           f'Area: {address3}\n'
+           f'Postcode: {postcode}\n'
+           f'Date Received: {date_received}\n'
+           f'Date Completed: {date_completed}\n'
+           f'Request Details: {text}\n'
+           f'Type: {type}\n'
+           f'Time to complete: {time_to_complete} days\n'))
 
     # Asking if user wants to view actions
     actions_view = input('Would you like to view the actions? (1 for yes 2 for no) ')
