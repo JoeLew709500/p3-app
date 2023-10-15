@@ -230,7 +230,19 @@ def create_request():
         except ValueError as e:
             print(e)
         else:
-            add_new_record_to_worksheet(record, requests)
+            input('Click enter to continue\n')
+            menu_title = 'Please select one of the following options'
+            selections = ['Create record',
+                        'Create Menu',
+                        'Main menu']
+            selection = pick(selections, menu_title, '>>>')[1]
+            if selection == 0:
+                add_new_record_to_worksheet(record, requests)
+            elif selection == 1:
+                create_menu()
+            else:
+                main_menu()
+                    
 
 
 def add_completed_date(rec_id, row, date_rec):
@@ -306,8 +318,18 @@ def add_action(req_id):
         except ValueError as e:
             print(e)
         else:
-            add_new_record_to_worksheet(record, actions)
-            break
+            input('Click enter to continue\n')
+            menu_title = 'Please select one of the following options'
+            selections = ['Create action',
+                        'Back to request',
+                        'Main menu']
+            selection = pick(selections, menu_title, '>>>')[1]
+            if selection == 0:
+                add_new_record_to_worksheet(record, actions)
+            elif selection == 1:
+                find_by_id(requests,req_id)
+            else:
+                main_menu()           
 
 # Contact
 
@@ -616,7 +638,7 @@ def add_new_record_to_worksheet(record, database):
     selection = pick(selections, menu_title, '>>>')[1]
     if selection == 0:
         if database == actions:
-            find_by_id(requests, new_id)
+            find_by_id(requests, record[1])
         else:
             find_by_id(database, new_id)
     elif selection == 1:
