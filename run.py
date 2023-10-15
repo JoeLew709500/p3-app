@@ -296,11 +296,18 @@ def get_contact_details(id,row):
 
     print(f'Contact ID: {id}\nFirst Name: {first_name}\nLast Name: {last_name}\nPhone: {phone}\nEmail: {email}')
 
-    view_requests = input('Do you want to view all requests from this contact? (1 for yes 2 for no)\n')
-    if view_requests == '1':
+    input('Click enter to continue\n')
+    menu_title = 'Please select one of the following options'
+    selections = ['View linked requests','Search Menu','Main menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
         report_results(requests,id,2,0)
-    else:
+    elif selection == 1:
         search_menu()
+    else:
+        main_menu()
+
 # location
 def find_location_menu():
     """
@@ -338,11 +345,17 @@ def get_location_details(id,row):
 
     print(f'Location ID: {id}\nHouse Number: {address1}\nStreet: {address2}\nArea: {address3}\nPostcode: {postcode}')
 
-    view_requests = input('Do you want to view all requests linked to this location? (1 for yes 2 for no)\n')
-    if view_requests == '1':
+    input('Click enter to continue\n')
+    menu_title = 'Please select one of the following options'
+    selections = ['View linked requests','Search Menu','Main menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
         report_results(requests,id,3,0)
-    else:
+    elif selection == 1:
         search_menu()
+    else:
+        main_menu()
 
 # General Functions
 def find_by_id(database,id):
@@ -452,12 +465,17 @@ def create_record(database):
     elif database == location:
         record = create_premise()
 
-    correct = input('Would you like to create this record? (1 for yes 2 for no) ')
-    if correct == '1':
-        add_new_record_to_worksheet(record.list(),database)
+    input('Click enter to continue\n')
+    menu_title = 'Please select one of the following options'
+    selections = ['Create record','Create Menu','Main menu']
 
-    else:
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
+        add_new_record_to_worksheet(record.list(),database)
+    elif selection == 1:
         create_menu()
+    else:
+        main_menu()
 
 def add_new_record_to_worksheet(record,database):
     """
