@@ -115,7 +115,7 @@ def find_request_menu():
         search_menu()
 
 
-def get_request_details(id, row):
+def get_request_details(rec_id, row):
     """
     Prints request details to console
     """
@@ -126,7 +126,7 @@ def get_request_details(id, row):
     date_received = requests.cell(row, 4).value
     date_completed = requests.cell(row, 5).value
     text = requests.cell(row, 6).value
-    type = requests.cell(row, 7).value
+    rec_type = requests.cell(row, 7).value
     time_to_complete = requests.cell(row, 8).value
     contact_name = contact.cell(
         contact_info, 2).value + ' ' + contact.cell(contact_info, 3).value
@@ -137,7 +137,7 @@ def get_request_details(id, row):
     address3 = location.cell(location_info, 4).value
     postcode = location.cell(location_info, 5).value
 
-    print((f'\nRequest ID: {id}\n'
+    print((f'\nRequest ID: {rec_id}\n'
            'Contact Information\n'
            f'Contact Name: {contact_name}\n'
            f'Contact Number: {contact_number}\n'
@@ -150,7 +150,7 @@ def get_request_details(id, row):
            f'Date Received: {date_received}\n'
            f'Date Completed: {date_completed}\n'
            f'Request Details: {text}\n'
-           f'Type: {type}\n'
+           f'Type: {rec_type}\n'
            f'Time to complete: {time_to_complete} days'))
 
     input('Click enter to continue\n')
@@ -160,9 +160,9 @@ def get_request_details(id, row):
 
     selection = pick(selections, menu_title, '>>>')[1]
     if selection == 0:
-        find_actions(id)
+        find_actions(rec_id)
     elif selection == 1:
-        add_completed_date(id, row, date_received)
+        add_completed_date(rec_id, row, date_received)
     elif selection == 2:
         search_menu()
     else:
@@ -173,66 +173,67 @@ def create_request():
     """
     Add new request 
     """
-
+    selected_contact = ''
+    selected_location = ''
     record = []
     while True:
         try:
             # contact id
-
-            contact_search = pick(['By ID',
-                                    'By first name',
-                                    'By last name'],
-                                    ('Please select which way you want to'
-                                    ' search for the contact'), '>>>')[1]
-            if contact_search == 0:
-                selected_contact = input(('Please enter the '
-                                            'contact id\n'))
-            elif contact_search == 1:
-                selected_contact = find_for_report(
-                    contact, 'Please enter first name of contact', 2, 1)
-            else:
-                selected_contact = find_for_report(
-                    contact, 'Please enter last name of contact', 3, 1)
+            while selected_contact == '':
+                contact_search = pick(['By ID',
+                                        'By first name',
+                                        'By last name'],
+                                        ('Please select which way you want to'
+                                        ' search for the contact'), '>>>')[1]
+                if contact_search == 0:
+                    selected_contact = input(('Please enter the '
+                                                'contact id\n'))
+                elif contact_search == 1:
+                    selected_contact = find_for_report(
+                        contact, 'Please enter first name of contact', 2, 1)
+                else:
+                    selected_contact = find_for_report(
+                        contact, 'Please enter last name of contact', 3, 1)
 
 
             # location id
-
-            location_search = pick(['By ID',
-                                    'By street',
-                                    'By area',
-                                    'By postcode'],
-                                    ('Please select which way you want to '
-                                    'search for the locations'), '>>>')[1]
-            if location_search == 0:
-                selected_location = input('Please enter the location id\n')
-            elif location_search == 1:
-                selected_location = find_for_report(
-                    location, 'Please enter street name', 3, 1)
-            elif location_search == 2:
-                selected_location = find_for_report(
-                    location, 'Please enter area eg, Port Talbot', 4, 1)
-            else:
-                selected_location = find_for_report(
-                    location, 'Please enter postcode eg, sa12 1aa', 5, 1)
+            while selected_location == '':
+                location_search = pick(['By ID',
+                                        'By street',
+                                        'By area',
+                                        'By postcode'],
+                                        ('Please select which way you want to '
+                                        'search for the locations'), '>>>')[1]
+                if location_search == 0:
+                    selected_location = input('Please enter the location id\n')
+                elif location_search == 1:
+                    selected_location = find_for_report(
+                        location, 'Please enter street name', 3, 1)
+                elif location_search == 2:
+                    selected_location = find_for_report(
+                        location, 'Please enter area eg, Port Talbot', 4, 1)
+                else:
+                    selected_location = find_for_report(
+                        location, 'Please enter postcode eg, sa12 1aa', 5, 1)
 
 
             date_rec = date_validator()
             date_comp = None
             text = input("What is the request about?\n")
-            type = request_type_selector()
+            rec_type = request_type_selector()
             record.append(selected_contact)
             record.append(selected_location)
             record.append(date_rec)
             record.append(date_comp)
             record.append(text)
-            record.append(type)
+            record.append(rec_type)
         except ValueError as e:
             print(e)
         else:
             add_new_record_to_worksheet(record, requests)
 
 
-def add_completed_date(id, row, date_rec):
+def add_completed_date(rec_id, row, date_rec):
     """
     Adds completed date to request and calculates time to complete
     """
@@ -242,7 +243,7 @@ def add_completed_date(id, row, date_rec):
     requests.update_cell(row, 5, date_comp)
     requests.update_cell(row, 8, days_to_comp)
     print('Completed date added')
-    get_request_details(id, row)
+    get_request_details(rec_id, row)
 
 # Actions
 
@@ -340,7 +341,7 @@ def find_contact_menu():
         search_menu()
 
 
-def get_contact_details(id, row):
+def get_contact_details(rec_id, row):
     """
     Prints contact details to console
     """
@@ -349,7 +350,7 @@ def get_contact_details(id, row):
     phone = contact.cell(row, 4).value
     email = contact.cell(row, 5).value
 
-    print('Contact ID: ',id,
+    print('Contact ID: ',rec_id,
           '\nFirst Name: ',first_name,
           '\nLast Name: ',last_name,
           '\nPhone: ',phone,
@@ -402,7 +403,7 @@ def find_location_menu():
         search_menu()
 
 
-def get_location_details(id, row):
+def get_location_details(rec_id, row):
     """
     Prints location details to console
     """
@@ -411,7 +412,7 @@ def get_location_details(id, row):
     address3 = location.cell(row, 4).value
     postcode = location.cell(row, 5).value
 
-    print('Location ID: ',id,
+    print('Location ID: ',rec_id,
           '\nHouse Number: ',address1,
           '\nStreet: ',address2,
           '\nArea: ',address3,
@@ -423,7 +424,7 @@ def get_location_details(id, row):
 
     selection = pick(selections, menu_title, '>>>')[1]
     if selection == 0:
-        report_results(requests, id, 3, 0)
+        report_results(requests, rec_id, 3, 0)
     elif selection == 1:
         search_menu()
     else:
@@ -432,26 +433,26 @@ def get_location_details(id, row):
 # General Functions
 
 
-def find_by_id(database, id):
+def find_by_id(database, rec_id):
     """
     Get details from id number
     """
 
-    if id == None:
+    if rec_id is None:
         while True:
             try:
-                id = int(input('What is the id you would like to view? \n'))
+                rec_id = int(input('What is the id you would like to view? \n'))
             except ValueError:
                 print('Entries must be an integer')
             else:
                 break
     # Finds the id and stores what cell that id is in
-    cell = database.find(str(id), in_column=1)
+    cell = database.find(str(rec_id), in_column=1)
 
     line = cell.row
 
     if database == requests:
-        get_request_details(str(id), line)
+        get_request_details(str(rec_id), line)
     elif database == contact:
         get_contact_details(str(id), line)
     else:
@@ -538,11 +539,13 @@ def print_report(database, results, from_create):
     else:
         if database == contact:
             selected_contact_id = input(
-                'Please enter the ID of the contact you want\n')
+                ('Please enter the ID of the contact you want\n'
+                'To search again click enter with no values entered\n'))
             return selected_contact_id
         else:
             selected_location_id = input(
-                'Please enter the ID of the location you want\n')
+                ('Please enter the ID of the location you want\n'
+                'To search again click enter with no values entered\n'))
             return selected_location_id
 
 
@@ -587,7 +590,7 @@ def add_new_record_to_worksheet(record, database):
     """
     Adds new data to worksheet
     """
-    print(f'Updating......\n')
+    print('Updating......\n')
 
     # Get max number in id column for next ID
     all_ids = database.col_values(1)
@@ -611,7 +614,7 @@ def add_new_record_to_worksheet(record, database):
     selection = pick(selections, menu_title, '>>>')[1]
     if selection == 0:
         if database == actions:
-            find_by_id(requests, record[1])
+            find_by_id(requests, new_id)
         else:
             find_by_id(database, new_id)
     elif selection == 1:
@@ -679,11 +682,11 @@ def continue_menu_try_again(selected):
     """
     type_text = f'You selected {selected}\n\nPlease select one of the below:'
     types = ['This is the correct selection', 'search again', 'main menu']
-    type = pick(types, type_text, indicator='>>>')[1]
-    if type == 2:
+    rec_type = pick(types, type_text, indicator='>>>')[1]
+    if rec_type == 2:
         main_menu()
     else:
-        return type
+        return rec_type
 
 
 main_menu()
