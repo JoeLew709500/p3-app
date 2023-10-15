@@ -469,9 +469,13 @@ def find_by_id(database, rec_id):
             else:
                 break
     # Finds the id and stores what cell that id is in
-    cell = database.find(str(rec_id), in_column=1)
-
-    line = cell.row
+    try:    
+        cell = database.find(str(rec_id), in_column=1)
+        line = cell.row
+    except AttributeError:
+        print('Record',rec_id,"doesn't exist in",database.title,'\n')
+        input('Click enter to continue to the search menu\n')
+        search_menu()
 
     if database == requests:
         get_request_details(str(rec_id), line)
