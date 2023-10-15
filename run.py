@@ -362,7 +362,7 @@ def get_contact_details(rec_id, row):
 
     selection = pick(selections, menu_title, '>>>')[1]
     if selection == 0:
-        report_results(requests, id, 2, 0)
+        report_results(requests, rec_id, 2, 0)
     elif selection == 1:
         search_menu()
     else:
@@ -454,9 +454,9 @@ def find_by_id(database, rec_id):
     if database == requests:
         get_request_details(str(rec_id), line)
     elif database == contact:
-        get_contact_details(str(id), line)
+        get_contact_details(str(rec_id), line)
     else:
-        get_location_details(str(id), line)
+        get_location_details(str(rec_id), line)
 
 
 def find_for_report(database, search, col, from_create):
