@@ -92,7 +92,7 @@ def find_request_menu():
     elif selection == 2:
         find_for_report(requests,'Please enter the completed date you want to search in dd/mm/yyyy format',5,0)
     elif selection == 3:
-        find_for_report(requests,'Please enter either flytip or noise',7,0)
+        find_for_report(requests,'Please enter request type',7,0)
     else:
         search_menu()
 
@@ -187,9 +187,7 @@ def create_request():
             date_rec = date_validator()
             date_comp = None
             text = input("What is the request about?\n")
-            type_text = 'Please select the request type:'
-            types = ['flytip','noise','abandoned vehicle']
-            type = pick(types,type_text,indicator='>>>')[0]
+            type = request_type_selector()
             record.append(selected_contact)
             record.append(selected_location)
             record.append(date_rec)
@@ -399,7 +397,10 @@ def find_for_report(database,search,col,from_create):
     """
     Obtains search criteria
     """
-    search_criteria = input(f'{search}\n')
+    if database == requests and col == 7:
+        search_criteria = request_type_selector()
+    else:
+        search_criteria = input(f'{search}\n')
     report_results(database,search_criteria,col,from_create)
 
 def report_results(database,search_criteria,col,from_create):
@@ -533,12 +534,18 @@ def date_validator():
     date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
     while True:
         try:
-            date_input = input("what's the date of the action? (Enter in dd/mm/yyyy format)\n")
+            date_input = input("what's the date? (Enter in dd/mm/yyyy format)\n")
             if not date_test.match(date_input):
                 raise ValueError(f"The date was entered in the wrong format the format needs to be dd/mm/yyyy you entered {date_input}")
         except ValueError as e:
             print(e)
         else:
             return date_input
+
+def request_type_selector():
+    type_text = 'Please select the request type:'
+    types = ['flytip','noise','abandoned vehicle']
+    type = pick(types,type_text,indicator='>>>')[0]
+    return type
 
 main_menu()
