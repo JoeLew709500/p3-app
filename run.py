@@ -24,9 +24,6 @@ actions = SHEET.worksheet('actions')
 contact = SHEET.worksheet('contact')
 location = SHEET.worksheet('location')
 
-# User selected records
-selected_contact_id = None
-selected_location_id = None
 
 # Master menus
 def main_menu():
@@ -176,51 +173,48 @@ def create_request():
     """
     Add new request 
     """
-    global selected_contact_id
-    global selected_location_id
+
     record = []
     while True:
         try:
             # contact id
-            if selected_contact_id == None:
-                contact_search = pick(['By ID',
-                                       'By first name',
-                                       'By last name'],
-                                      ('Please select which way you want to'
-                                       ' search for the contact'), '>>>')[1]
-                if contact_search == 0:
-                    selected_contact = input(('Please enter the '
-                                              'contact id\n'))
-                elif contact_search == 1:
-                    find_for_report(
-                        contact, 'Please enter first name of contact', 2, 1)
-                else:
-                    find_for_report(
-                        contact, 'Please enter last name of contact', 3, 1)
+
+            contact_search = pick(['By ID',
+                                    'By first name',
+                                    'By last name'],
+                                    ('Please select which way you want to'
+                                    ' search for the contact'), '>>>')[1]
+            if contact_search == 0:
+                selected_contact = input(('Please enter the '
+                                            'contact id\n'))
+            elif contact_search == 1:
+                selected_contact = find_for_report(
+                    contact, 'Please enter first name of contact', 2, 1)
             else:
-                selected_contact = selected_contact_id
+                selected_contact = find_for_report(
+                    contact, 'Please enter last name of contact', 3, 1)
+
 
             # location id
-            if selected_location_id == None:
-                location_search = pick(['By ID',
-                                        'By street',
-                                        'By area',
-                                        'By postcode'],
-                                       ('Please select which way you want to '
-                                        'search for the locations'), '>>>')[1]
-                if location_search == 0:
-                    selected_location = input('Please enter the location id\n')
-                elif location_search == 1:
-                    selected_location = find_for_report(
-                        location, 'Please enter street name', 3, 1)
-                elif location_search == 2:
-                    selected_location = find_for_report(
-                        location, 'Please enter area eg, Port Talbot', 4, 1)
-                else:
-                    selected_location = find_for_report(
-                        location, 'Please enter postcode eg, sa12 1aa', 5, 1)
+
+            location_search = pick(['By ID',
+                                    'By street',
+                                    'By area',
+                                    'By postcode'],
+                                    ('Please select which way you want to '
+                                    'search for the locations'), '>>>')[1]
+            if location_search == 0:
+                selected_location = input('Please enter the location id\n')
+            elif location_search == 1:
+                selected_location = find_for_report(
+                    location, 'Please enter street name', 3, 1)
+            elif location_search == 2:
+                selected_location = find_for_report(
+                    location, 'Please enter area eg, Port Talbot', 4, 1)
             else:
-                selected_location = selected_location_id
+                selected_location = find_for_report(
+                    location, 'Please enter postcode eg, sa12 1aa', 5, 1)
+
 
             date_rec = date_validator()
             date_comp = None
@@ -235,8 +229,6 @@ def create_request():
         except ValueError as e:
             print(e)
         else:
-            selected_contact_id = None
-            selected_location_id = None
             add_new_record_to_worksheet(record, requests)
 
 
@@ -477,7 +469,7 @@ def find_for_report(database, search, col, from_create):
     else:
         search_criteria = input(f'{search}\n')
 
-    report_results(database, search_criteria, col, from_create)
+    return report_results(database, search_criteria, col, from_create)
 
 
 def report_results(database, search_criteria, col, from_create):
@@ -487,16 +479,13 @@ def report_results(database, search_criteria, col, from_create):
 
     results = database.findall(search_criteria, in_column=col)
 
-    print_report(database, results, from_create)
+    return print_report(database, results, from_create)
 
 
 def print_report(database, results, from_create):
     """
     Prints report to console
     """
-
-    global selected_contact_id
-    global selected_location_id
 
     # Selects what sheet we are searching
     if database == requests:
@@ -550,10 +539,11 @@ def print_report(database, results, from_create):
         if database == contact:
             selected_contact_id = input(
                 'Please enter the ID of the contact you want\n')
+            return selected_contact_id
         else:
             selected_location_id = input(
                 'Please enter the ID of the location you want\n')
-        create_request()
+            return selected_location_id
 
 
 def display_all(database):
@@ -570,6 +560,9 @@ def display_all(database):
 
 
 def create_record(database):
+    """
+    creates record in sheets for any class based data
+    """
     if database == contact:
         record = create_person()
     elif database == location:
