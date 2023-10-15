@@ -184,9 +184,7 @@ def create_request():
                 selected_location = selected_location_id
 
 
-            date_rec = input("What's the date the request was received? (Enter in dd/mm/yyyy format)\n")
-            if not date_test.match(date_rec):
-                raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
+            date_rec = date_validator()
             date_comp = None
             text = input("What is the request about?\n")
             type_text = 'Please select the request type:'
@@ -210,7 +208,7 @@ def add_completed_date(id,row,date_rec):
     Adds completed date to request and calculates time to complete
     """
 
-    date_comp = input('Please enter date\n')
+    date_comp = date_validator()
     days_to_comp = calculate_days_between_dates(date_rec,date_comp)
     requests.update_cell(row,5,date_comp)
     requests.update_cell(row,8,days_to_comp)
@@ -264,10 +262,7 @@ def add_action(req_id):
         record = []
         try:
             text = input('What are the details of the action?\n')
-            date_input = input("what's the date of the action? (Enter in dd/mm/yyyy format)\n")
-            date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
-            if not date_test.match(date_input):
-                raise ValueError("The date was entered in the wrong format the format needs to be dd/mm/yyyy")
+            date_input = date_validator()
             record.append(int(req_id))
             record.append(text)
             record.append(date_input)       
@@ -533,5 +528,17 @@ def calculate_days_between_dates(date1,date2):
     date2 = datetime.datetime.strptime(date2, "%d/%m/%Y")
     calc_days = date2-date1
     return calc_days.days
+
+def date_validator():
+    date_test = re.compile(r"^[0-9]{2}/[0-9]{2}/[0-9]{4}$")
+    while True:
+        try:
+            date_input = input("what's the date of the action? (Enter in dd/mm/yyyy format)\n")
+            if not date_test.match(date_input):
+                raise ValueError(f"The date was entered in the wrong format the format needs to be dd/mm/yyyy you entered {date_input}")
+        except ValueError as e:
+            print(e)
+        else:
+            return date_input
 
 main_menu()
