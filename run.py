@@ -1,10 +1,12 @@
 import gspread
 import re
+import datetime
+import pandas as pd
+import numpy as np
 from google.oauth2.service_account import Credentials
 from tabulate import tabulate
 from classes import Person,Premise,create_person,create_premise
 from pick import pick #https://github.com/wong2/pick
-import datetime
 
 SCOPE = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -43,7 +45,7 @@ def search_menu():
     To select which search menu you would like select
     """
     menu_title = 'Please select one of the following options'
-    selections = ['Search for requests','Search for contacts','Search for location','Main menu']
+    selections = ['Search for requests','Search for contacts','Search for location','Print statistics report','Main menu']
 
     selection = pick(selections,menu_title,'>>>')[1]
 
@@ -53,6 +55,8 @@ def search_menu():
         find_contact_menu()
     elif selection == 2:
         find_location_menu()
+    elif selection == 3:
+        print_stats()
     else:
         main_menu()
 
@@ -212,7 +216,6 @@ def add_completed_date(id,row,date_rec):
     requests.update_cell(row,8,days_to_comp)
     print('Completed date added')
     get_request_details(id,row)
-
 
 # Actions
 def find_actions(req_id):
@@ -548,4 +551,13 @@ def request_type_selector():
     type = pick(types,type_text,indicator='>>>')[0]
     return type
 
+def print_stats():
+    print('Average number of days to complete request by request type')
+    df = pd.DataFrame(requests.get_all_records())
+    df.replace('', np.nan, inplace=True)
+    df = df.dropna()
+    mean_df = df.groupby('type')['timetocomp'].mean()
+    print(mean_df)
+    input('Click enter to continue back to main menu\n')
+    main_menu()
 main_menu()
