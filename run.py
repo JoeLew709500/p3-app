@@ -467,8 +467,10 @@ def find_for_report(database, search, col, from_create):
         search_criteria = request_type_selector()
     elif database == requests and col == 4 or database == requests and col == 5:
         search_criteria = date_validator()
+    elif database == location and col == 5:
+        search_criteria = input(f'{search}\n').upper()
     else:
-        search_criteria = input(f'{search}\n')
+        search_criteria = input(f'{search}\n').title()
 
     return report_results(database, search_criteria, col, from_create)
 
