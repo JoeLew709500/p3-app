@@ -130,16 +130,19 @@ def get_request_details(id,row):
            f'Date Completed: {date_completed}\n'
            f'Request Details: {text}\n'
            f'Type: {type}\n'
-           f'Time to complete: {time_to_complete} days\n'))
+           f'Time to complete: {time_to_complete} days'))
 
-    # Asking if user wants to view actions
-    actions_view = input('Would you like to view the actions? (1 for yes 2 for no) ')
+    input('Click enter to continue\n')
+    menu_title = 'Please select one of the following options'
+    selections = ['View actions','Search Menu','Main menu']
 
-    if actions_view == '1':
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
         find_actions(id)
-    else:
+    elif selection == 1:
         search_menu()
-
+    else:
+        main_menu()
 def create_request():
     """
     Add new request 
@@ -222,9 +225,17 @@ def print_actions(req_id,results):
 
     print(f"Actions for Request {req_id}\n{tabulate(report,headers=header,tablefmt='github')}")
 
-    add_to_actions = input('Do you want to add an action? (1 for yes 2 for main menu) \n')
-    if add_to_actions == '1':
+    input('Click enter to continue\n')
+    menu_title = 'Please select one of the following options'
+    selections = ['Add an action','Back to request','Search Menu','Main menu']
+
+    selection = pick(selections,menu_title,'>>>')[1]
+    if selection == 0:
         add_action(req_id)
+    elif selection == 1:
+        find_by_id(requests,req_id)
+    elif selection == 2:
+        search_menu()
     else:
         main_menu()
 
