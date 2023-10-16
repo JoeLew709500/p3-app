@@ -241,9 +241,8 @@ def create_request():
             elif selection == 1:
                 create_menu()
             else:
-                main_menu()
-                    
-
+                main_menu()       
+                            
 
 def add_completed_date(rec_id, row, date_rec):
     """
