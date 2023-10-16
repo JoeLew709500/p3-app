@@ -186,8 +186,13 @@ def create_request():
                                         ('Please select which way you want to'
                                         ' search for the contact'), '>>>')[1]
                 if contact_search == 0:
-                    selected_contact = input(('Please enter the '
-                                                'contact id\n'))
+                    while True:
+                        try:
+                            selected_contact = int(input('What is the id you would like to select? \n'))
+                        except ValueError:
+                            print('Entries must be an integer')
+                        else:
+                            break
                 elif contact_search == 1:
                     selected_contact = find_for_report(
                         contact, 'Please enter first name of contact', 2, 1)
@@ -205,7 +210,13 @@ def create_request():
                                         ('Please select which way you want to '
                                         'search for the locations'), '>>>')[1]
                 if location_search == 0:
-                    selected_location = input('Please enter the location id\n')
+                    while True:
+                        try:
+                            selected_location = int(input('What is the id you would like to select? \n'))
+                        except ValueError:
+                            print('Entries must be an integer')
+                        else:
+                            break
                 elif location_search == 1:
                     selected_location = find_for_report(
                         location, 'Please enter street name', 3, 1)
