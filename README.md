@@ -66,12 +66,50 @@ Please see database diagram below this was created at [https://dbdiagram.io/d](h
 
 ## Testing
 [Back to table of content](#table-of-content)
+### Linter 
+    I used Pylint in vscode to check if I was conforming with PEP8 and any flags this linter showed I went back through to rectify.
+
+### Fixes
+    All fixes to any bugs or issues were committed via git with the prefix fix for ease of traceability.
+
+### Heroku 
+    There was some issues with deployments with the requirements not found in heroku these we review and found not to be necessary for the application to work these were then removed from the requirements file in commits 2be07a7 and 2c92e84.
 
 ## Deployment
 [Back to table of content](#table-of-content)
+
+This project is built with python and a csv file rather than a sql for the database which is contect via Google Cloud API.
+
+I used Heroku as the host to deploy here I done the following steps:
+
+
+1. Created a new Heroku app
+2. Set up buildpacks to Python and NodeJS
+3. Select the main branch for deployment
+4. Deploy branch
 
 ## Final Product
 [Back to table of content](#table-of-content)
 
 ## Credits
 [Back to table of content](#table-of-content)
+
+### Third Party Libraries
+* re
+    * This library was used to check for a the email format and other string formats
+    * This was taken from https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python by ankthon
+* datetime
+    * This library was used to check dates
+* pandas
+    * This library was used to run the statistical report
+* numpy
+    * This library was used to remove rows in the pandas data frame to work out the true mean value
+* gspread
+    * This library was used to interact with Google Sheets 
+* google.oauth2.service_account
+    * This library was used to use Google Clouds API
+* pick
+    * This library was used to give a better user experience for selecting an option
+    * [Github Repository for pick](https://github.com/wong2/pick)
+* tabulate
+    * This library was used to structure the data in a user friendly format in the console

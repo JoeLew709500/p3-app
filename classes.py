@@ -62,6 +62,7 @@ def create_person():
                 phone_test = ''
             if not isinstance(phone_test, int):
                 raise ValueError("Phone number must be an integer")
+            # The below code was adapted from the below to verify the email address format
             # https://www.geeksforgeeks.org/check-if-email-address-valid-or-not-in-python/
             email_regex = re.compile(
                 r"^[a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$")
