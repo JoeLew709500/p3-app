@@ -17,8 +17,8 @@ Visit live site: [Python Console Public Protection System](https://python-consol
     * [Statistical Report](#statistical-report)
 * [Data Model](#data-model)
 * [Testing](#testing)
+    * [Manual Testing](#manual-testing)
 * [Deployment](#deployment)
-* [Final Product](#final-product)
 * [Credits](#credits)
 
 ## Features
@@ -75,6 +75,32 @@ Please see database diagram below this was created at [https://dbdiagram.io/d](h
 ### Heroku 
     There was some issues with deployments with the requirements not found in heroku these we review and found not to be necessary for the application to work these were then removed from the requirements file in commits 2be07a7 and 2c92e84.
 
+### Manual Testing
+
+#### Menus
+Feature | Desired Outcome | Pass/Fail
+---|---|---
+App starts | Opens Main Menu | Pass
+Search Menu | Opens Search Menu | Pass
+Create Menu | Opens Create Menu | Pass
+Search for requests | Opens Requests Search Menu | Pass
+Search for contacts | Opens Contacts Search Menu | Pass
+Search for location | Opens Location Search Menu | Pass
+
+#### Create Records
+Feature | Desired Outcome | Pass/Fail
+---|---|---
+Create a Request | Runs create request function | Pass
+Create a contact | Runs create Contact function | Pass
+Create a location | Runs create Premise function | Pass
+
+#### Search functions
+Feature | Desired Outcome | Pass/Fail
+---|---|---
+Find by Id | Finds by ID in the correct table | Pass
+Find by criteria | Finds by user criteria and searches correct table in correct column | Pass
+Print Statistics report | Prints the mean number of days to complete by request type | Pass
+
 ## Deployment
 [Back to table of content](#table-of-content)
 
@@ -87,9 +113,6 @@ I used Heroku as the host to deploy here I done the following steps:
 2. Set up buildpacks to Python and NodeJS
 3. Select the main branch for deployment
 4. Deploy branch
-
-## Final Product
-[Back to table of content](#table-of-content)
 
 ## Credits
 [Back to table of content](#table-of-content)
