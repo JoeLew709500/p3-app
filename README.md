@@ -15,6 +15,7 @@ Visit live site: [Python Console Public Protection System](https://python-consol
     * [Create Records](#create-records)
     * [Search for Records](#search-for-records)
     * [Statistical Report](#statistical-report)
+* [Data Model](#data-model)
 * [Testing](#testing)
 * [Deployment](#deployment)
 * [Final Product](#final-product)
@@ -55,6 +56,14 @@ Users can create new contacts, locations or requests/calls in this section
 ### Statistical Report
     This lets you run a report on the average(mean) number of days it takes to close a request/call by request type
 ![Statistical Report image](read-me-assets/stats-report-img.png)
+
+## Data Model
+[Back to table of content](#table-of-content)
+
+Please see database diagram below this was created at [https://dbdiagram.io/d](https://dbdiagram.io/d)
+
+![Database Diagram image](read-me-assets/database-diagram-img.png)
+
 ## Testing
 [Back to table of content](#table-of-content)
 
